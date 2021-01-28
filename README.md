@@ -49,7 +49,24 @@ After running the command above, a folder __pycache__ is created, since we do no
 
 To test that our application is fine, we could open any browser and go to the address: http://localhost:5000/, and we will see the message: Hello, World!
 
-We can also use curl to see it it works right into our console (Might add details about this)
+We can also use curl to see it it works right into our console (Might add details about this).
+
+Here we have the endpoins I'm going to build:
+
+Endpoints
+
+GET '/users'
+GET '/users/<int:id>'
+POST '/users'
+PATCH '/users/<int:id>'
+DELETE '/users/<int:id>'
+
+GET '/appointments'
+GET '/appointments/<int:id>'
+POST '/appointments/'
+PATCH '/appointments/<int:id>'
+DELETE '/appointments/<int:id>'
+
 
 
 
