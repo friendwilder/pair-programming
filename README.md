@@ -39,5 +39,17 @@ We can see that inside requirements.txt it indicates that Flask has been install
 
 We then add the code for the minimal application with Flask.
 
+At this point it might be good to run the application to see if it works fine.
+
+There are several ways you can start your application, but since I am running on MacOS I will be using the one described below:
+
+FLASK_APP=app FLASK_ENV=development flask run
+
+After running the command above, a folder __pycache__ is created, since we do not need the content to be part of our repository, we add the folder into our .gitignore file.
+
+To test that our application is fine, we could open any browser and go to the address: http://localhost:5000/, and we will see the message: Hello, World!
+
+We can also use curl to see it it works right into our console (Might add details about this)
+
 
 
