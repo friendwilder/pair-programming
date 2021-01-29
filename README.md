@@ -53,20 +53,55 @@ We can also use curl to see it it works right into our console (Might add detail
 
 Here we have the endpoins I'm going to build:
 
-Endpoints
+###Endpoints
 
-GET '/users'
-GET '/users/<int:id>'
-POST '/users'
-PATCH '/users/<int:id>'
-DELETE '/users/<int:id>'
+- GET '/users'
+- GET '/users/<int:id>'
+- POST '/users'
+- PATCH '/users/<int:id>'
+- DELETE '/users/<int:id>'
 
-GET '/appointments'
-GET '/appointments/<int:id>'
-POST '/appointments/'
-PATCH '/appointments/<int:id>'
-DELETE '/appointments/<int:id>'
+- GET '/appointments'
+- GET '/appointments/<int:id>'
+- POST '/appointments/'
+- PATCH '/appointments/<int:id>'
+- DELETE '/appointments/<int:id>'
+
+For the moment, the app will be built with two models: user and appointment.
+
+To control the SQLAlchemy integration with the app. We need to install Flask-SQLAlchemy. It will allow us to leverage all the functions and helpers from both sqlalchemy and sqlalchemy.orm 
+
+`pip3 install Flask-SQLAlchemy`
+
+And then run again 
+
+`pip3 freeze > requirements.txt`
+
+Deriving from the minimal installation [here](https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/#a-minimal-application), lets start defining the models.
+
+Here, we need to take a look into databases, not because the app needs us to know, just because it is always good to know what is happening under the hood.
 
 
+### Creating a local PostgreSQL Database
 
+If we user the shell, we create a database called pair-p like this:
 
+`createdb pair-p`
+
+To access the database, first we need to access psql by typing this:
+
+`psql`
+
+If we want to know all the databases in our local postgres we type:
+
+`\l`
+
+If you happen to name your database 'pair-p', to enter the database you use:
+
+`\c[onnect] {[DBNAME|- USER|- HOST|- PORT|-] | conninfo}`
+
+In this case we only need to input this:
+
+`\c pair-p Wilder`
+
+Since at this point we have not yet stored data, the database is empty, so running the `\dt` command will show: _Did not find any relations._, in case we have data, it will list the tables in the database.

@@ -1,4 +1,6 @@
 from flask import Flask
+from models import setup_db, User, Appointment
+
 app = Flask(__name__)
 
 
