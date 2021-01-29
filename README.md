@@ -1,19 +1,19 @@
-Introduction
+## Introduction
 
 The idea to solve a problem that I had experienced since the beginning of times (to find a partner for pair programming with availability) was pushing me to spend some time on this personal project, deliver a functional product and then step by step make it better to reach its full potential.
 
 Or in case it can serve a double purpose, I can make small increment commits which will allow people who are learning web development to see the progress and have a better understanding.
 
-STEPS
+### STEPS
 
 The first step would be to set up a virtual environment. More info here:
 https://docs.python.org/3/tutorial/venv.html
 
-python3 -m venv local-env
+`python3 -m venv local-env`
 
 And then accessing that virtual environment in case we need to add a specific python package.
 
-source local-env/bin/activate
+`source local-env/bin/activate`
 
 The second step would be to create a .gitignore file that will allow us to avoid commiting and pushing content specified in this file to github (for instance the content inside our virtual environment).
 
@@ -29,11 +29,11 @@ Since we are ready to start writing the app in app.py, we will need to import th
 
 https://flask.palletsprojects.com/en/1.1.x/installation/
 
-pip3 install Flask
+`pip3 install Flask`
 
 When we install a package, that package might automatically install the packages that it requires, we can look into the documentation above, or check directly what was installed into our environment, for that we run:
 
-pip3 freeze > requirements.txt
+`pip3 freeze > requirements.txt`
 
 We can see that inside requirements.txt it indicates that Flask has been installed, we can proceed and import in our app.py file and no error will be thrown.
 
@@ -43,9 +43,9 @@ At this point it might be good to run the application to see if it works fine.
 
 There are several ways you can start your application, but since I am running on MacOS I will be using the one described below:
 
-FLASK_APP=app FLASK_ENV=development flask run
+`FLASK_APP=app FLASK_ENV=development flask run`
 
-After running the command above, a folder __pycache__ is created, since we do not need the content to be part of our repository, we add the folder into our .gitignore file.
+After running the command above, a folder _ __pycache__ _ is created, since we do not need the content to be part of our repository, we add the folder into our .gitignore file.
 
 To test that our application is fine, we could open any browser and go to the address: http://localhost:5000/, and we will see the message: Hello, World!
 
