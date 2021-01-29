@@ -28,7 +28,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    appointment = db.relationship('appointments', backref='username', lazy=True)
+    appointment = db.relationship('Appointment', backref='username', lazy=True)
 
     def __init__(self, username, email):
         self.username = username
@@ -56,5 +56,5 @@ class Appointment(db.Model):
     __tablename__ = 'appointments'
 
     id = db.Column(db.Integer, primary_key=True)
-    hosting_user_id = db.Column(db.Integer, db.ForeignKey('username.id'), nullable=False)
-    invited_user_id = db.Column(db.Integer, db.ForeignKey('username.id'), nullable=True)
+    hosting_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    # invited_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
