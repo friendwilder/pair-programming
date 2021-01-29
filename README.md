@@ -134,4 +134,26 @@ To handle http exceptions gracefully we can make good use of an useful function 
 
 `from flask import abort`
 
+### Database Migration
+
+At this point, we have realized our original schema for our database needs some changes. The course of action would be to migrate the database and this can be accomplished by an extension that handles SQLAlchemy database migrations for Flask applications using Alembic: 
+
+```
+pip3 install Flask-Migrate
+pip3 freeze > requirements.txt
+```
+Once we have our new models modified, we run (only the first time)
+
+`flask db init`
+
+Then,
+
+```
+flask db migrate -m "Added relationship between users and appointments"
+flask db upgrade
+```
+
+**Note:** Running _flask db init_ throws an error because _No module named 'psycopg2'_
+
+**Note:** On Mojave 10.14.6. there might be an issue installing psycopg2, [here](https://github.com/python-pillow/Pillow/issues/3438#issuecomment-435169249) is a very likely solution.
 

@@ -1,11 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from sqlalchemy.orm import backref
 
 
 database_name = "pair-p"
 database_path = "postgres://{}/{}".format('Wilder@localhost:5432', database_name)
 
 db = SQLAlchemy()
-
 
 '''
 setup_db(app)
@@ -17,6 +18,7 @@ def setup_db(app, database_path=database_path):
   db.app = app
   db.init_app(app)
   db.create_all()
+  migrate = Migrate(app, db)
   return db
 
 
@@ -26,6 +28,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    appointment = db.relationship('appointments', backref='username', lazy=True)
 
     def __init__(self, username, email):
         self.username = username
@@ -42,7 +45,16 @@ class User(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+    def format(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email
+        }
+
 class Appointment(db.Model):
-    __tablename__ = 'appointment'
+    __tablename__ = 'appointments'
 
     id = db.Column(db.Integer, primary_key=True)
+    hosting_user_id = db.Column(db.Integer, db.ForeignKey('username.id'), nullable=False)
+    invited_user_id = db.Column(db.Integer, db.ForeignKey('username.id'), nullable=True)

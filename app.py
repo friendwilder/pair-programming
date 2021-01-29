@@ -23,6 +23,13 @@ def hello_world():
 
 @app.route('/users', methods=['GET'])
 def get_users():
+    users_list = User.query.all()
+    users_list = [user.format() for user in users_list]
+
+    return jsonify({
+        'success': True,
+        'users': users_list
+    })
     return 'GET not implemented'
 
 
