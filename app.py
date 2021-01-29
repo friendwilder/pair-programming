@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, abort
+from flask_migrate import current
 from werkzeug.exceptions import HTTPException
 from models import setup_db, User, Appointment
 
@@ -23,14 +24,16 @@ def hello_world():
 
 @app.route('/users', methods=['GET'])
 def get_users():
-    users_list = User.query.all()
-    users_list = [user.format() for user in users_list]
+    try:
+        users_list = User.query.all()
+        users_list = [user.format() for user in users_list]
 
-    return jsonify({
-        'success': True,
-        'users': users_list
-    })
-    return 'GET not implemented'
+        return jsonify({
+            'success': True,
+            'users': users_list
+        })
+    except Exception:
+        abort(422)
 
 
 '''
@@ -45,7 +48,15 @@ def get_users():
 
 @app.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
-    return 'GET user not implemented'
+    try:
+        current_user = User.query.get(id)
+        current_user = current_user.format()
+        return jsonify({
+            'success': True,
+            'user': current_user
+        })
+    except Exception:
+        abort(422)
 
 
 '''
@@ -61,7 +72,6 @@ def get_user(id):
 @app.route('/users', methods=['POST'])
 def add_user():
     body = request.get_json()
-    print(body)
 
     username = body.get('username', None)
     email = body.get('email', None)
@@ -91,7 +101,26 @@ def add_user():
 
 @app.route('/users/<int:id>', methods=['PATCH'])
 def update_user(id):
-    return 'PATCH not implemented'
+    body = request.get_json()
+    print(body)
+    username = body.get('username', None)
+    email = body.get('email', None)
+    appointment = body.get('appointment', None)
+
+    try:
+        current_user = User.query.get(id)
+        print(current_user)
+        if current_user is None:
+            abort(404)
+        current_user.username = username
+        current_user.email = email
+        current_user.update()
+        return jsonify({
+            'success': True,
+            'user': current_user.format()
+        })
+    except Exception:
+        abort(422)
 
 
 '''
@@ -106,4 +135,12 @@ def update_user(id):
 
 @app.route('/users/<int:id>', methods=['DELETE'])
 def delete_user(id):
-    return 'DELETE not implemented'
+    try:
+        current_user = User.query.get(id)
+        current_user.delete()
+        return jsonify({
+            'success': True,
+            'deleted': id
+        })
+    except Exception:
+        abort(422)
