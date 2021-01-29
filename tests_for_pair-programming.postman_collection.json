@@ -42,9 +42,35 @@
 		},
 		{
 			"name": "/users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"pelambre\",\n    \"email\": \"pp@elavion.tk\"\n}"
+				},
 				"url": {
 					"raw": "{{host}}/users",
 					"host": [
@@ -52,6 +78,13 @@
 					],
 					"path": [
 						"users"
+					],
+					"query": [
+						{
+							"key": "Content/Type",
+							"value": "application/json",
+							"disabled": true
+						}
 					]
 				}
 			},

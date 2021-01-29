@@ -1,12 +1,14 @@
-from flask import Flask
+from flask import Flask, request, jsonify, abort
+from werkzeug.exceptions import HTTPException
 from models import setup_db, User, Appointment
 
 app = Flask(__name__)
+setup_db(app)
 
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return 'Hello, World :P'
 
 
 '''
@@ -51,7 +53,23 @@ def get_user(id):
 
 @app.route('/users', methods=['POST'])
 def add_user():
-    return 'POST not implemented'
+    body = request.get_json()
+    print(body)
+
+    username = body.get('username', None)
+    email = body.get('email', None)
+
+    try:
+        new_user = User(username=username, email=email)
+        new_user.insert()
+
+        return jsonify({
+            'success': True,
+            'created': new_user.id
+        })
+    except HTTPException:
+        abort(422)
+        # return 'POST not implemented'
 
 
 '''

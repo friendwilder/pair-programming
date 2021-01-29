@@ -79,6 +79,20 @@ And then run again
 
 Deriving from the minimal installation [here](https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/#a-minimal-application), lets start defining the models.
 
+It is important to mention that here we have adopted the approach to wrap all the initial configuration to use a database with Flask-SQLAlchemy within a method:
+
+```
+def setup_db(app, database_path=database_path):
+  app.config["SQLALCHEMY_DATABASE_URI"] = database_path
+  app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+  db.app = app
+  db.init_app(app)
+  db.create_all()
+  return db 
+```
+
+We have also defined methods to implement CRUD operations within the User class, which inherits from _db.Models_.
+
 Here, we need to take a look into databases, not because the app needs us to know, just because it is always good to know what is happening under the hood.
 
 
@@ -105,3 +119,19 @@ In this case we only need to input this:
 `\c pair-p Wilder`
 
 Since at this point we have not yet stored data, the database is empty, so running the `\dt` command will show: _Did not find any relations._, in case we have data, it will list the tables in the database.
+
+
+Since our application requires to interact with incoming data, we can use the class flask.Request.
+
+
+From the [Flask webpage](https://flask.palletsprojects.com/en/1.1.x/api/#module-flask.json) you can read something like "jsonify adds a few enhancements to make life easier". So, we need to import jsonify:
+
+`from flask import jsonify`
+
+**Quick note**: The browser is from my point of view a huge Operating System, so it does a lot of things that we certainly do not know. Here, since our application is programmed to accept a json, the tests in postman have to specify that we are sending _Content Type: application/json_
+
+To handle http exceptions gracefully we can make good use of an useful function abort
+
+`from flask import abort`
+
+
