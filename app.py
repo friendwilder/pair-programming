@@ -73,16 +73,18 @@ def get_user(id):
 def add_user():
     body = request.get_json()
 
-    username = body.get('username', None)
-    email = body.get('email', None)
+    user_id = body.get('id', None)
+    # email = body.get('email', None)
+    appointment_time = body.get('appointment_date', None)
 
     try:
-        new_user = User(username=username, email=email)
-        new_user.insert()
+        new_appointment = Appointment(appointment_time=appointment_time)
+        new_appointment.hosting_user.append(User.query.get(user_id))
+        new_appointment.insert()
 
         return jsonify({
             'success': True,
-            'created': new_user.id
+            'created': new_appointment.id
         })
     except HTTPException:
         abort(422)

@@ -22,13 +22,19 @@ def setup_db(app, database_path=database_path):
   return db
 
 
+both_users = db.Table('both_users',
+    db.Column('hosting_user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    # db.Column('invited_user_id', db.Integer, db.ForeignKey('users.id'), nullable=True),
+    db.Column('appointment_id', db.Integer, db.ForeignKey('appointments.id'), primary_key=True)
+)
+
 class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    appointment = db.relationship('Appointment', backref='username', lazy=True)
+    # appointment = db.relationship('Appointment', backref='users', lazy=True)
 
     def __init__(self, username, email):
         self.username = username
@@ -56,5 +62,17 @@ class Appointment(db.Model):
     __tablename__ = 'appointments'
 
     id = db.Column(db.Integer, primary_key=True)
-    hosting_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    appointment_time = db.Column(db.TIMESTAMP(), nullable=False)
+    # hosting_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     # invited_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+
+    hosting_user = db.relationship('User', secondary=both_users, lazy='subquery', backref=db.backref('users', cascade='all, delete'))
+    #invited_user = db.relationship('User', secondary=both_users, backref=db.backref('users', cascade='all, delete'))
+
+    def __init__(self, appointment_time):
+        self.appointment_time = appointment_time
+        # self.hosting_user_id = hosting_user_id
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
