@@ -69,13 +69,12 @@ def get_user(id):
 '''
 
 
-@app.route('/users', methods=['POST'])
+@app.route('/appointments', methods=['POST'])
 def add_user():
     body = request.get_json()
 
     user_id = body.get('id', None)
-    # email = body.get('email', None)
-    appointment_time = body.get('appointment_date', None)
+    appointment_time = body.get('appointment_time', None)
 
     try:
         new_appointment = Appointment(appointment_time=appointment_time)
@@ -88,7 +87,6 @@ def add_user():
         })
     except HTTPException:
         abort(422)
-        # return 'POST not implemented'
 
 
 '''
@@ -101,25 +99,21 @@ def add_user():
 '''
 
 
-@app.route('/users/<int:id>', methods=['PATCH'])
-def update_user(id):
+@app.route('/appointments/<int:id>', methods=['PATCH'])
+def update_appointment(id):
     body = request.get_json()
-    print(body)
-    username = body.get('username', None)
-    email = body.get('email', None)
-    appointment = body.get('appointment', None)
+    updated_time = body.get('updated_time', None)
 
     try:
-        current_user = User.query.get(id)
-        print(current_user)
-        if current_user is None:
+        appointment = Appointment.query.get(id)
+        if appointment is None:
             abort(404)
-        current_user.username = username
-        current_user.email = email
-        current_user.update()
+        appointment.appointment_time = updated_time
+        appointment.update()
         return jsonify({
             'success': True,
-            'user': current_user.format()
+            'id': appointment.id,
+            'updated_time': appointment.appointment_time
         })
     except Exception:
         abort(422)
@@ -135,14 +129,14 @@ def update_user(id):
 '''
 
 
-@app.route('/users/<int:id>', methods=['DELETE'])
-def delete_user(id):
+@app.route('/appointments/<int:id>', methods=['DELETE'])
+def delete_appointment(id):
     try:
-        current_user = User.query.get(id)
-        current_user.delete()
+        appointment = Appointment.query.get(id)
+        appointment.delete()
         return jsonify({
             'success': True,
             'deleted': id
         })
     except Exception:
-        abort(422)
+        abort(422)  

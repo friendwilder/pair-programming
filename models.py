@@ -34,7 +34,6 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    # appointment = db.relationship('Appointment', backref='users', lazy=True)
 
     def __init__(self, username, email):
         self.username = username
@@ -63,16 +62,19 @@ class Appointment(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     appointment_time = db.Column(db.TIMESTAMP(), nullable=False)
-    # hosting_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    # invited_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
     hosting_user = db.relationship('User', secondary=both_users, lazy='subquery', backref=db.backref('users', cascade='all, delete'))
-    #invited_user = db.relationship('User', secondary=both_users, backref=db.backref('users', cascade='all, delete'))
 
     def __init__(self, appointment_time):
         self.appointment_time = appointment_time
-        # self.hosting_user_id = hosting_user_id
 
     def insert(self):
         db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
         db.session.commit()
